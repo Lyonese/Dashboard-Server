@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard</title>
+  <style>
+    body {
+      background: #000000;
+      color: #FAF9F6;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      margin: 0;
+      padding: 10px;
+      /*overflow: hidden;*/
+    }
+
+    span.service-status {
+      font-size: 14px;
+      color: #206020;
+    }
+
+    span.service-status2 {
+      font-size: 14px;
+      color: #60205f;
+    }
+
+    .reloj-dolar {
+      display: flex;
+      width: 100%;
+      max-width: 1024px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .reloj-widget,
+    .dolar-widget {
+      background-color: #1e1e1e;
+      color: #FAF9F6;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      flex: 1;
+    }
+
+    #hora {
+      font-size: 60px;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px #000000;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 24px;
+      text-shadow: 2px 2px 4px #000000;
+    }
+
+    .card {
+      background: #1e1e1e;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      width: 100%;
+      max-width: 1024px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 24px;
+      margin: 5px 0;
+      text-shadow: 2px 2px 4px #000000;
+    }
+
+    img {
+      width: 100px;
+    }
+
+    .widgets-centrales {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 1024px;
+      margin-bottom: 20px;
+    }
+
+    .widgets-centrales .card {
+      flex: 1;
+      margin: 0;
+    }
+
+    .forecast {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      padding-bottom: 1px;
+      overflow: hidden;
+    }
+
+    .forecast-day {
+      background: #2a2a2a;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      flex: 1;
+      box-sizing: border-box;
+    }
+
+    .forecast-day img {
+      width: 60px;
+    }
+
+    .forecast-day div {
+      font-size: 16px;
+      margin: 4px 0;
+      text-shadow: 2px 2px 4px #000000;
+    }
+
+    ::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #555;
+      border-radius: 4px;
+    }
+
+    .inactive {
+    opacity: 0.5;
+    }
+
+    .inactive-icon {
+      color: #602020;
+    }
+
+    .service {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+    }
+
+    .weather-icon {
+      width: 100px;
+      height: 100px;
+    }
+    </style>
+  </head>
+<body>
+
+  <div class="reloj-dolar">
+    <div class="reloj-widget">
+    <div id="hora"></div>
+    </div>
+
+    <div class="dolar-widget">
+      <h2>Dólar</h2>
+      <p id="dolar-oficial">Oficial: --</p>
+    </div>
+  </div>
+
+  <div class="widgets-centrales">
+    <div class="card">
+      <p><i data-feather="cpu"></i> <span id="cpu-usage">--%</span></p>
+      <p><i data-feather="thermometer"></i> <span id="cpu-temp">-- °C</span></p>
+      <p><i data-feather="terminal"></i> <span id="ram-usage">--%</span></p>
+      <p><i data-feather="hard-drive"></i> <span id="disk-usage">--%</span></p>
+      <p id="net-usage">
+        <i data-feather="upload"></i> <span id="net-up" class="service-status2">-- MB/s</span>
+        <i data-feather="download"></i> <span id="net-down" class="service-status">-- MB/s</span>
+      </p>
+  </div>
+
+    <div class="card">
+      <h1 id="city">Ciudad</h1>
+      <i id="icon" class="weather-icon" data-feather="sun"></i>
+      <p id="temp">Temperatura: -- °C</p>
+      <p id="desc">Descripción: --</p>
+    </div>
+
+    <div class="card">
+      <p id="pihole-status">
+        <img id="pihole-icon" class="service" src="pihole.png" alt="Pi-hole" >
+        <span id="pihole-text" class="service-status"></span>
+    </p>
+    <p id="tailscale-status">
+        <img id="tailscale-icon" class="service" src="tailscale.png" alt="Tailscale" >
+        <span id="tailscale-text" class="service-status"></span>
+    </p>
+    <p id="plex-status">
+        <img id="plex-icon" class="service" src="plex.png" alt="Plex" >
+        <span id="plex-text" class="service-status"></span>
+    </p>
+    <p id="nextcloud-status">
+        <img id="nextcloud-icon" class="service" src="nextcloud.png" alt="Nextcloud" >
+        <span id="nextcloud-text" class="service-status"></span>
+    </p>
+    <p id="navidrome-status">
+        <img id="navidrome-icon" class="service" src="navidrome.png" alt="Navidrome" >
+        <span id="navidrome-text" class="service-status"></span>
+    </p>
+  </div>
+    </div>
+
+  <div class="card">
+    <div id="forecast" class="forecast"></div>
+  </div>
+
+<script>
+  feather.replace();
+  const lat = -27.362;
+  const lon = -55.9008;
+  const hoy = new Date().toISOString().split('T')[0];
+  const cincoDiasDespues = new Date(Date.now() + 6 * 86400000).toISOString().split('T')[0];
+  const urlActual = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`;
+  const urlForecast = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,temperature_2m_max,weathercode&timezone=auto&start_date=${hoy}&end_date=${cincoDiasDespues}`;
+
+  const weatherCodeToDescription = {
+    0: "Despejado", 1: "Mayormente despejado", 2: "Parcialmente nublado", 3: "Nublado",
+    45: "Niebla", 48: "Niebla con escarcha", 51: "Llovizna ligera", 53: "Llovizna moderada",
+    55: "Llovizna densa", 61: "Lluvia ligera", 63: "Lluvia moderada", 65: "Lluvia fuerte",
+    71: "Nieve ligera", 73: "Nieve moderada", 75: "Nieve intensa", 80: "Chubascos leves",
+    81: "Chubascos moderados", 82: "Chubascos fuertes", 95: "Tormentas", 96: "Tormenta con granizo leve",
+    99: "Tormenta con granizo fuerte"
+  };
+
+  const weatherCodeToIcon = {
+    0: "sun", 1: "sun", 2: "cloud", 3: "cloud",
+    45: "cloud", 48: "cloud",
+    51: "cloud-drizzle", 53: "cloud-drizzle", 55: "cloud-drizzle",
+    61: "cloud-rain", 63: "cloud-rain", 65: "cloud-rain",
+    71: "cloud-snow", 73: "cloud-snow", 75: "cloud-snow",
+    80: "cloud-rain", 81: "cloud-rain", 82: "cloud-rain",
+    95: "cloud-lightning", 96: "cloud-lightning", 99: "cloud-lightning"
+  };
+
+  function obtenerClimaActual() {
+  fetch("https://api.open-meteo.com/v1/forecast?latitude=-27.362&longitude=-55.9008&current_weather=true&daily=sunrise,sunset&timezone=auto")
+    .then(response => response.json())
+    .then(data => {
+      const temp = Math.round(data.current_weather.temperature);
+      const code = data.current_weather.weathercode;
+      const descripcion = weatherCodeToDescription[code] || "N/A";
+      document.getElementById("city").textContent = "";
+      document.getElementById("temp").textContent = `${temp} °C`;
+      document.getElementById("desc").textContent = descripcion;
+      const now = new Date();
+      const sunrise = new Date(data.daily.sunrise[0]);
+      const sunset = new Date(data.daily.sunset[0]);
+      const isDaytime = now > sunrise && now < sunset;
+      const iconName = isDaytime ? weatherCodeToIcon[code] : "moon";
+      const color = obtenerColorPorClima(code);
+      const iconElement = document.getElementById("icon");
+      iconElement.setAttribute('data-feather', iconName);
+      iconElement.style.color = color;
+      feather.replace();
+    })
+    .catch(err => {
+      console.error(err);
+      document.querySelector(".card").innerHTML = "<p>Error al obtener clima</p>";
+    });
+}
+
+function obtenerPronostico() {
+  fetch(urlForecast)
+    .then(response => response.json())
+    .then(data => {
+      const forecastContainer = document.getElementById("forecast");
+      forecastContainer.innerHTML = "";
+      const dias = data.daily.time;
+      const tempsMin = data.daily.temperature_2m_min;
+      const tempsMax = data.daily.temperature_2m_max;
+      const codigos = data.daily.weathercode;
+      const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+      for (let i = 2; i <= 6 && i < dias.length; i++) {
+        const fecha = new Date(dias[i]);
+        const diaSemana = diasSemana[fecha.getDay()];
+        const dia = fecha.getDate();
+        const tempMin = Math.round(tempsMin[i]);
+        const tempMax = Math.round(tempsMax[i]);
+        const code = codigos[i];
+        const desc = weatherCodeToDescription[code] || "N/A";
+        const iconName = weatherCodeToIcon[code] || "sun";
+        const color = obtenerColorPorClima(code);
+        const diaHtml = `
+          <div class="forecast-day">
+            <div>${diaSemana} ${dia}</div>
+            <i class="weather-icon" data-feather="${iconName}" style="color: ${color}"></i>
+            <div>${tempMin}/${tempMax} °C</div>
+            <div>${desc}</div>
+          </div>`;
+        forecastContainer.innerHTML += diaHtml;
+      }
+      feather.replace();
+    })
+    .catch(err => {
+      console.error(err);
+      document.getElementById("forecast").innerHTML = "<p>Error al obtener pronóstico</p>";
+    });
+}
+
+function obtenerColorPorClima(code) {
+  switch (code) {
+    case 0:  // Despejado
+    case 1:  // Mayormente despejado
+      return '#beaa3f'; // Dorado
+    case 2:  // Parcialmente nublado
+    case 3:  // Nublado
+      return '#A9A9A9'; // Gris
+    case 45: // Niebla
+    case 48: // Niebla con escarcha
+      return '#D3D3D3'; // Gris claro
+    case 51: // Llovizna ligera
+    case 53: // Llovizna moderada
+    case 55: // Llovizna densa
+    case 61: // Lluvia ligera
+    case 63: // Lluvia moderada
+    case 65: // Lluvia fuerte
+    case 80: // Chubascos leves
+    case 81: // Chubascos moderados
+    case 82: // Chubascos fuertes
+      return '#568fc6'; // Azul
+    case 71: // Nieve ligera
+    case 73: // Nieve moderada
+    case 75: // Nieve intensa
+      return '#FFFFFF'; // Blanco
+    case 95: // Tormentas
+    case 96: // Tormenta con granizo leve
+    case 99: // Tormenta con granizo fuerte
+      return '#60205f'; // Morado
+    default:
+      return '#000000'; // Negro (por defecto)
+  }
+}
+
+let ultimoMinuto = null;
+function actualizarReloj() {
+  const ahora = new Date();
+  const minutos = ahora.getMinutes();
+  if (minutos !== ultimoMinuto) {
+    ultimoMinuto = minutos;
+    const horas = String(ahora.getHours()).padStart(2, '0');
+    const minutosStr = String(minutos).padStart(2, '0');
+    document.getElementById('hora').textContent = `${horas}:${minutosStr}`;
+  }
+}
+
+  function obtenerDolar() {
+    fetch('https://api.bluelytics.com.ar/v2/latest')
+      .then(response => response.json())
+      .then(data => {
+        const oficial = data.oficial.value_sell;
+        document.getElementById('dolar-oficial').textContent = `$${oficial}`;
+      })
+      .catch(error => {
+        console.error('Error al obtener el dólar:', error);
+        document.getElementById('dolar-oficial').textContent = 'Error al obtener';
+      });
+  }
+
+  function obtenerDatosSistema() {
+  fetch('SystemStatus.php')
+    .then(response => response.json())
+    .then(data => {
+      const cpu = Math.round(data.cpu);
+      const cpuTemp = data.cpu_temp;
+      const ram = Math.round(data.ram);
+      const disk = data.disk;
+      const mbSentPerSec = data.mb_sent_per_sec;
+      const mbRecvPerSec = data.mb_recv_per_sec;
+
+      if (cpu < 0 || cpu > 100) {
+        console.error("Valor incorrecto para la CPU:", cpu);
+        document.getElementById('cpu-usage').textContent = `--%`;
+      } else {
+        document.getElementById('cpu-usage').textContent = `${cpu}%`;
+      }
+      document.getElementById('cpu-temp').textContent = `${cpuTemp} °C`;
+      document.getElementById('ram-usage').textContent = `${ram}%`;
+      document.getElementById('disk-usage').textContent = `${disk}`;
+      document.getElementById('net-up').textContent = `${mbSentPerSec} MB/s`;
+      document.getElementById('net-down').textContent = `${mbRecvPerSec} MB/s`;
+      feather.replace();
+    })
+    .catch(error => {
+      console.error('Error al obtener datos del sistema:', error);
+      document.getElementById('system-status').innerHTML = "<p>Error al obtener datos</p>";
+    });
+}
+
+function obtenerEstadoServicios() {
+    fetch('SystemStatus.php')
+        .then(response => response.json())
+        .then(data => {
+            const piHoleIcon = document.getElementById('pihole-icon');
+            const piHoleText = document.getElementById('pihole-text');
+            if (data.pihole === 'Activo') {
+                piHoleIcon.style.opacity = 1;
+                piHoleText.innerHTML = '<i data-feather="check-circle"></i>';
+            } else {
+                piHoleIcon.style.opacity = 0.3;
+                piHoleText.innerHTML = '<i data-feather="x-octagon" class="inactive-icon"></i>';
+            }
+            
+            const tailscaleIcon = document.getElementById('tailscale-icon');
+            const tailscaleText = document.getElementById('tailscale-text');
+            if (data.tailscale === 'Activo') {
+                tailscaleIcon.style.opacity = 1;
+                tailscaleText.innerHTML = '<i data-feather="check-circle"></i>';
+            } else {
+                tailscaleIcon.style.opacity = 0.3;
+                tailscaleText.innerHTML = '<i data-feather="x-octagon" class="inactive-icon"></i>';
+            }
+
+            const plexIcon = document.getElementById('plex-icon');
+            const plexText = document.getElementById('plex-text');
+            if (data.plex === 'Activo') {
+                plexIcon.style.opacity = 1;
+                plexText.innerHTML = '<i data-feather="check-circle"></i>';
+            } else {
+                plexIcon.style.opacity = 0.3;
+                plexText.innerHTML = '<i data-feather="x-octagon" class="inactive-icon"></i>';
+            }
+
+            const nextcloudIcon = document.getElementById('nextcloud-icon');
+            const nextcloudText = document.getElementById('nextcloud-text');
+            if (data.nextcloud === 'Activo') {
+                nextcloudIcon.style.opacity = 1;
+                nextcloudText.innerHTML = '<i data-feather="check-circle"></i>';
+            } else {
+                nextcloudIcon.style.opacity = 0.3;
+                nextcloudText.innerHTML = '<i data-feather="x-octagon" class="inactive-icon"></i>';
+            }
+
+            const navidromeIcon = document.getElementById('navidrome-icon');
+            const navidromeText = document.getElementById('navidrome-text');
+            if (data.navidrome === 'Activo') {
+                navidromeIcon.style.opacity = 1;
+                navidromeText.innerHTML = '<i data-feather="check-circle"></i>';
+            } else {
+                navidromeIcon.style.opacity = 0.3;
+                navidromeText.innerHTML = '<i data-feather="x-octagon" class="inactive-icon"></i>';
+            }
+
+            feather.replace();
+        })
+        .catch(error => {
+            console.error('Error al obtener datos de los servicios:', error);
+        });
+}
+
+function calcularTiempoHastaMedianoche() {
+  const ahora = new Date();
+  const medianoche = new Date(
+    ahora.getFullYear(),
+    ahora.getMonth(),
+    ahora.getDate() + 1,
+    0, 0, 0
+  );
+  return medianoche - ahora;
+}
+
+function programarActualizacionMedianoche() {
+  const tiempoHastaMedianoche = calcularTiempoHastaMedianoche();
+  setTimeout(function() {
+    location.reload();
+    programarActualizacionMedianoche();
+  }, tiempoHastaMedianoche);
+}
+
+window.onload = function() {
+  feather.replace();
+  obtenerEstadoServicios();
+  programarActualizacionMedianoche();
+};
+
+  setInterval(obtenerEstadoServicios, 10000);
+  setInterval(obtenerDatosSistema, 5000);
+  obtenerClimaActual();
+  obtenerPronostico();
+  obtenerDolar();
+  actualizarReloj();
+  setInterval(obtenerClimaActual, 900000);
+  setInterval(obtenerPronostico, 900000);
+  setInterval(obtenerDolar, 86400000);
+  setInterval(actualizarReloj, 1000);
+  </script>
+</body>
+</html>
