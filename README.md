@@ -21,9 +21,32 @@ The dashboard is served via Apache2 and built with plain HTML, CSS, and JavaScri
 
 The dashboard collects system data and service statuses through simple scripts running on the Debian server. This data is then displayed in real-time using JavaScript on a lightweight HTML page. It refreshes automatically to keep the information up-to-date without needing manual reloads.
 
+-System Monitoring
+The dashboard fetches system data from a PHP script (SystemStatus.php) that collects information about CPU usage, temperature, RAM usage, disk usage, and network speeds. This data is then displayed in the dashboard.
+
+-Weather Information
+The dashboard uses the Open-Meteo API to fetch current weather data and a 5-day forecast. The weather data includes temperature, weather codes, and descriptions. The weather codes are mapped to corresponding icons and descriptions for display.
+
+-Service Status
+The dashboard checks the status of various services (Pi-hole, Tailscale, Plex, Nextcloud, Navidrome) by fetching data from the SystemStatus.php script. The status of each service is displayed with an icon indicating whether the service is active or inactive.
+
 ## Why It’s Useful
 
 Running on low-spec hardware, this dashboard provides a quick, at-a-glance overview of my server’s health and essential services. It helps me monitor resource usage, check service availability, and stay informed about external factors like weather and currency rates — all from a compact display, saving time and avoiding the need for complex monitoring tools.
 
+-Comprehensive Monitoring
+The dashboard provides a comprehensive overview of the server's status, including system performance, weather information, and service statuses. This allows for quick and easy monitoring of the server's health and performance.
+
+-User-Friendly Interface
+The dashboard features a user-friendly interface with clear and concise information. The use of icons and color-coding makes it easy to quickly assess the status of various components.
+
+-Real-Time Updates
+The dashboard updates in real-time, providing the most current information about the server's status. This ensures that any issues can be quickly identified and addressed.
+
+-Customizable
+The dashboard can be easily customized to include additional services or information as needed. The modular design makes it easy to add or remove components.
 ## Screenshot
 ![Dashboard Screenshot](Screenshot.png)
+
+-Contributing
+Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
