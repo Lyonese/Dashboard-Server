@@ -25,4 +25,5 @@ The dashboard collects system data and service statuses through simple scripts r
 
 Running on low-spec hardware, this dashboard provides a quick, at-a-glance overview of my server’s health and essential services. It helps me monitor resource usage, check service availability, and stay informed about external factors like weather and currency rates — all from a compact display, saving time and avoiding the need for complex monitoring tools.
 
+## Screenshot
 ![Dashboard Screenshot](Screenshot.png)
