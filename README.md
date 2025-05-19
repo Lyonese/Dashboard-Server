@@ -1,52 +1,59 @@
-# 📊 Server Dashboard (Debian 32-bit)
+# 📊 Server Monitoring Interface (Debian 32-bit)
 
-This is a lightweight, custom-built dashboard designed for a home server running Debian 32-bit on an Intel Atom processor. It displays real-time system information and service statuses, tailored for a 10.1" screen with a 1024x600 resolution.
+This is a lightweight, custom-built monitoring interface designed for a home server running Debian 32-bit on an Intel Atom processor. It's optimized for a 10.1" display with a resolution of 1024x600 and provides real-time insights into system performance and service availability.
 
-## Key features:
-- 🖥️ System resource monitoring (CPU, RAM, disk usage)
-- 🌤️ Current weather data
-- 💵 Real-time USD exchange rate
-- 📡 Service status display for:
-  - Pi-hole
-  - Plex Media Server
-  - Tailscale
-  - Nextcloud
-  - Navidrome
+## ✨ Features
 
-- 💡 Optimized for minimal performance impact on low-spec hardware
+- 🖥️ **System Metrics Overview**
+  - CPU usage and temperature
+  - RAM and disk usage
+  - Network upload/download speeds
 
-The dashboard is served via Apache2 and built with plain HTML, CSS, and JavaScript—no frameworks or external dependencies—ensuring fast load times and easy maintenance.
+- 🌤️ **Weather Integration**
+  - Current conditions and 5-day forecast via Open-Meteo API
+  - Interprets weather codes into meaningful icons and descriptions
 
-## How It Works
+- 💵 **Live Exchange Rate**
+  - Real-time USD currency conversion display
 
-The dashboard collects system data and service statuses through simple scripts running on the Debian server. This data is then displayed in real-time using JavaScript on a lightweight HTML page. It refreshes automatically to keep the information up-to-date without needing manual reloads.
+- 📡 **Service Health Monitoring**
+  - Checks and displays the status of:
+    - Pi-hole
+    - Plex Media Server
+    - Tailscale
+    - Nextcloud
+    - Navidrome
 
-- 
-The dashboard fetches system data from a PHP script (SystemStatus.php) that collects information about CPU usage, temperature, RAM usage, disk usage, and network speeds. This data is then displayed in the dashboard.
+- ⚙️ **Performance-Oriented Design**
+  - Fully static HTML/CSS/JS with no frameworks
+  - Minimal resource usage, ideal for low-spec hardware
 
-- 
-The dashboard uses the Open-Meteo API to fetch current weather data and a 5-day forecast. The weather data includes temperature, weather codes, and descriptions. The weather codes are mapped to corresponding icons and descriptions for display.
+## 🧠 How It Works
 
-- 
-The dashboard checks the status of various services (Pi-hole, Tailscale, Plex, Nextcloud, Navidrome) by fetching data from the SystemStatus.php script. The status of each service is displayed with an icon indicating whether the service is active or inactive.
+The interface is powered by background scripts that gather system and service data, processed through a lightweight `SystemStatus.php` backend. The information is rendered on a dynamically updating HTML page using JavaScript.
 
-## Why It’s Useful
+- **System Info** is fetched from `SystemStatus.php`, including CPU, memory, disk, and network stats.
+- **Weather Data** is pulled from the Open-Meteo API and translated into user-friendly visuals.
+- **Service Checks** display each monitored service's status with color-coded icons for clarity.
+- **Auto-refreshing UI** ensures data is always current without needing manual reloads.
 
-Running on low-spec hardware, this dashboard provides a quick, at-a-glance overview of my server’s health and essential services. It helps me monitor resource usage, check service availability, and stay informed about external factors like weather and currency rates — all from a compact display, saving time and avoiding the need for complex monitoring tools.
+## 💡 Why It’s Useful
 
-- 
-The dashboard provides a comprehensive overview of the server's status, including system performance, weather information, and service statuses. This allows for quick and easy monitoring of the server's health and performance.
+Designed for low-powered machines, this web-based control panel provides:
 
-- 
-The dashboard features a user-friendly interface with clear and concise information. The use of icons and color-coding makes it easy to quickly assess the status of various components.
+- A clear and instant overview of system performance
+- Fast identification of service outages or abnormal behavior
+- Weather and currency information at a glance
+- A modular and easily extensible codebase
+- Clean, icon-based UI optimized for small displays
+- Hassle-free operation with no dependencies
 
-- 
-The dashboard updates in real-time, providing the most current information about the server's status. This ensures that any issues can be quickly identified and addressed.
+## 📸 Screenshot
 
-- 
-The dashboard can be easily customized to include additional services or information as needed. The modular design makes it easy to add or remove components.
-## Screenshot
-![Dashboard Screenshot](Screenshot.png)
+<p align="center">
+  <img src="Screenshot.png" alt="Server Dashboard Screenshot" width="700"/>
+</p>
 
-- 
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+## 🤝 Contributions
+
+Contributions are welcome! Feel free to open an issue or submit a pull request with improvements, feature suggestions, or bug fixes.
