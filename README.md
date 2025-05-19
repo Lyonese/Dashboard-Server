@@ -1,7 +1,5 @@
 # 📊 Server Monitoring Interface (Debian 32-bit)
 
-This is a lightweight, custom-built monitoring interface designed for a home server running Debian 32-bit on an Intel Atom processor. It's optimized for a 10.1" display with a resolution of 1024x600 and provides real-time insights into system performance and service availability.
-
 ## ✨ Features
 
 - 🖥️ **System Metrics Overview**
