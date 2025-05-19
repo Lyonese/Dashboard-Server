@@ -30,12 +30,40 @@ This is a lightweight, custom-built monitoring interface designed for a home ser
 
 ## 🧠 How It Works
 
-The interface is powered by background scripts that gather system and service data, processed through a lightweight `SystemStatus.php` backend. The information is rendered on a dynamically updating HTML page using JavaScript.
+The interface relies on a custom PHP backend (`SystemStatus.php`) and a Bash script (`SystemStatus.sh`) to gather and serve live data from the server. Here's a breakdown of how each component works:
 
-- **System Info** is fetched from `SystemStatus.php`, including CPU, memory, disk, and network stats.
-- **Weather Data** is pulled from the Open-Meteo API and translated into user-friendly visuals.
-- **Service Checks** display each monitored service's status with color-coded icons for clarity.
-- **Auto-refreshing UI** ensures data is always current without needing manual reloads.
+### 🖥️ System Metrics
+
+The PHP script executes `SystemStatus.sh`, which:
+
+- Calculates **CPU usage** using two samples from the `top` command.
+- Retrieves **CPU temperature** via `lm-sensors`, formatted for display.
+- Measures **network bandwidth** by comparing bytes sent/received from `/proc/net/dev` over a 1-second interval.
+
+This data is passed back as a comma-separated string and parsed in PHP to JSON format.
+
+### 🧠 Memory & Disk Usage
+
+- **RAM usage** is calculated by reading `/proc/meminfo` and computing used memory as a percentage of the total.
+- **Disk usage** is derived from `disk_total_space()` and `disk_free_space()` for the root partition, shown as a percentage.
+
+### 🛰️ Service Monitoring
+
+The system checks the **status of essential services** using two methods:
+
+- `service <name> status` and string matching are used to determine if:
+  - `pihole-FTL`, `tailscaled`, `plexmediaserver`, or `apache2` (Nextcloud) are running.
+- `pgrep -x navidrome` is used to determine if Navidrome is active as it's not managed by a typical service unit.
+
+Each service is reported as `"Activo"` or `"Inactivo"` and displayed with visual indicators in the frontend.
+
+### 🌐 Frontend Data Handling
+
+The data is exposed as a JSON object, which is periodically fetched by the JavaScript frontend. The page updates in real-time without reloads, providing a seamless monitoring experience.
+
+---
+
+This modular approach ensures flexibility, low resource usage, and compatibility with legacy hardware.
 
 ## 💡 Why It’s Useful
 
